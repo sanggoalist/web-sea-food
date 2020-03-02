@@ -1,0 +1,47 @@
+.ItemDetail {
+    margin-bottom: 200px;
+    .detail-img-wrapper {
+            width: calc(100% - 100px);
+            padding: 50px 50px 0px 50px;
+        img {
+            width: 100%;
+        }
+    }
+    .d-title-wrapper {
+        padding: 50px;
+        .d-title {
+            .dd-title {
+                float: left;
+                word-break: break-all;
+                max-width: 80%;
+                font-size: 25px;
+                font-weight: bold;
+            }
+            .dd-icon {
+                float: right;
+                color: red;
+                cursor: pointer;
+            }
+            
+        }
+    }
+    .d-content {
+        padding: 0px 50px;
+        .d-content-price {
+            text-align: left;
+            color: red;
+            font-weight: bold;
+            padding-bottom: 10px;
+        }
+        .d-content-location {
+            text-align: left;
+            padding-bottom: 10px;
+            div{
+                display: inline-block;
+            }
+        }
+        .d-content-main {
+            text-align: left;
+        }
+    }
+}

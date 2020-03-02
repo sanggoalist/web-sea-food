@@ -1,0 +1,60 @@
+.ItemInfo {
+    height: 100%;
+    width: 100%;
+    // padding-top: 24px;
+    .ItemInfoContainer {
+        height: calc(100%);
+        .paper-i {
+            height: 100%;
+            &.avatar-i {
+                .image-wrapper {
+                    height: calc(100% - 4px);
+                    width: calc(100% - 4px);
+                    
+                    img {
+                        border: 2px solid black;
+                        height: 100%;
+                        width: 100%;
+                    }
+                }
+            }
+            &.content-i {
+                .content-contain {
+                    height: 100%;
+                    .title-wrapper {
+                        height: 100%;
+                        .title-i {
+                            height: 100%;
+                            text-align: left;
+                            padding-left: 10px;
+                            font-weight: bold;
+                            font-size: 20px;
+                        }
+                    }
+                    .price-i {
+                        text-align: left;
+                        padding-left: 10px;
+                        color: red;
+                        font-weight: bold;
+                    }
+                    .title-end {
+                        place-self: flex-end;
+                        .title-end-i {
+                            text-align: left;
+                            padding-left: 10px;                           
+                        }
+                    }
+                }
+            }
+            &.info-i {
+                text-align: right;
+                padding-right: 10px;
+                .icon-i {
+                    color: red;
+                    cursor: pointer;
+                }
+            }
+        }
+
+    }
+}

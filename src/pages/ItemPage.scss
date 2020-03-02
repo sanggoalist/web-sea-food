@@ -1,0 +1,40 @@
+.ItemPage {
+    height: calc(100% - 6% - 64px);
+    .ItemPageWrapper {
+        height: 100%;
+        .ItemPageContainer {
+            height: 100%;
+            .paper {
+                height: 100%;
+                margin-top: 15px;
+                cursor: pointer;
+                position: relative;
+                &.left {
+                    margin-left: 24px;
+                }
+                &.right {
+                    margin-right: 24px;
+                }
+                &:hover {
+                    // border: 3px solid rgb(197, 197, 197);
+                    transform: scale3d(1.05, 1.05, 1);
+                    z-index: 10;
+                }
+                .paper-content {
+                    font-size: 50px;
+                    width: 300px;
+                    position: absolute;
+                    top: 50%;
+                    right: 50%;
+                    &.left {
+                        transform: translate(50%, -50%);
+                    }
+                    &.right {
+                        transform: translate(50%, -50%);
+                    }
+                    
+                }
+            }
+        }
+    }
+}
