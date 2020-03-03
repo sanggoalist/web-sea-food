@@ -2,6 +2,7 @@ import React from 'react';
 import { withRouter } from 'react-router-dom';
 import './ItemDetail.scss';
 import Icon from '@material-ui/core/Icon';
+import firebase from '../Firebase';
 
 
 class ItemDetail extends React.Component {
@@ -9,8 +10,33 @@ class ItemDetail extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            isFaverite: false
+            isFaverite: false,
+            item: {
+                id: 0,
+                location: "",
+                isFavor: false,
+                title: "",
+                price: 0,
+                content: ""
+            }
         }
+        this.clickFavorite = this.clickFavorite.bind(this);
+    }
+    componentDidMount(){
+        const ref = firebase.database().ref(`users/shrimp/sell/${this.props.match.params['idd']}`);
+        ref.on('value', (snapshoot) => {
+            this.setState({item: snapshoot.val()});
+        });
+    }
+    clickFavorite(){
+        const ref = firebase.database().ref(`users/shrimp/sell/${this.props.match.params['idd']}`);
+        const item =this.state.item;
+        item.isFavor = !this.state.item.isFavor;
+        ref.update(item).then(res => { 
+            this.setState({item: item});           
+        }).catch(err => {
+            console.log(err);
+        })
     }
     render() {
       return (
@@ -20,14 +46,14 @@ class ItemDetail extends React.Component {
                 </div>
                 <div className ="d-title-wrapper">
                     <div className ="d-title">
-                        <div className ="dd-title">Sell shrimp with the best prices</div>
-                        <Icon className = "dd-icon" fontSize = "large" onClick = {event => this.setState({isFaverite: !this.state.isFaverite})}>{this.state.isFaverite ? 'favorite': 'favorite_border'}</Icon>
+                        <div className ="dd-title">{this.state.item.title}</div>
+                        <Icon className = "dd-icon" fontSize = "large" onClick = {event => this.clickFavorite()}>{this.state.item.isFavor ? 'favorite': 'favorite_border'}</Icon>
                     </div>
                 </div>
                 <div className ="d-content">
-                    <div className ="d-content-price">100000$</div>
-                    <div className ="d-content-location"><Icon>place</Icon><div>Tp. Ho Chi Minh</div></div>
-                    <div className ="d-content-main">Content of the detail</div>
+                    <div className ="d-content-price">{this.state.item.price} $</div>
+                    <div className ="d-content-location"><Icon>place</Icon><div>{this.state.item.location}</div></div>
+                    <div className ="d-content-main">{this.state.item.content}</div>
                 </div>
         </div>
       );

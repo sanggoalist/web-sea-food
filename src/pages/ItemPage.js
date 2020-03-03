@@ -4,15 +4,23 @@ import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import '../pages/ItemPage.scss';
 import '../../src/animation.scss';
+import firebase from '../Firebase';
+
 class ItemPage extends React.Component {
     
     constructor(props){
         super(props);
         this.handleClick = this.handleClick.bind(this);
-        
+
     }
     handleClick(){
       this.props.history.push(`/items/${this.props.match.params['id']}/sell`);
+    }
+    componentDidMount(){
+      // const ref = firebase.database().ref('users/shrimp/sell');
+      // ref.on('value', (snapshoot) => {
+      //   console.log(snapshoot.val());
+      // });
     }      
     render() {
       return (

@@ -3,13 +3,30 @@ import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import './ItemInfo.scss';
 import Icon from '@material-ui/core/Icon';
+import firebase from '../Firebase';
+
 class ItemInfo extends React.Component {
     
     constructor(props){
         super(props);
         this.state = {
-            isFaverite: false
+            isFaverite: this.props.item.isFavor
         }
+        this.clickFavorite = this.clickFavorite.bind(this);
+    }
+    componentDidMount(){
+
+    }
+    clickFavorite(){
+        
+        const ref = firebase.database().ref(`users/shrimp/sell/${this.props.index - 1}`);
+        const item =this.props.item;
+        item.isFavor = !this.state.isFaverite;
+        ref.update(item).then(res => {
+            this.setState({isFaverite: !this.state.isFaverite});
+        }).catch(err => {
+            console.log(err);
+        })
     }
     render() {
         
@@ -28,16 +45,16 @@ class ItemInfo extends React.Component {
                     <div className = "paper-i content-i">
                     <Grid container spacing={0} className = "content-contain">
                         <Grid item xs={12}>
-                            <div className = "title-wrapper"><div className ="title-i">Sell shrimp with the best prices</div></div>
+                            <div className = "title-wrapper"><div className ="title-i">{this.props.item.title}</div></div>
                         </Grid>
                         <Grid item xs={12}>
                             <div>
-                                <div className = "price-i">100000 $</div>
+                                <div className = "price-i">{this.props.item.price} $</div>
                             </div>
                         </Grid>
                         <Grid item xs={12} className = "title-end">
                             <div>
-                                <div className ="title-end-i">Tp. Ho Chi Minh</div>
+                                <div className ="title-end-i">{this.props.item.location}</div>
                             </div>
                         </Grid>
                     </Grid>
@@ -45,7 +62,7 @@ class ItemInfo extends React.Component {
                 </Grid>
                 <Grid item xs={2}>
                     <div className = "paper-i info-i">
-                        <Icon className = "icon-i" fontSize = "large" onClick = {event => this.setState({isFaverite: !this.state.isFaverite})}>{this.state.isFaverite ? 'favorite': 'favorite_border'}</Icon>
+                        <Icon className = "icon-i" fontSize = "large" onClick = {event => this.clickFavorite()}>{this.state.isFaverite ? 'favorite': 'favorite_border'}</Icon>
                     </div>
                     
                 </Grid>

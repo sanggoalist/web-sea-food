@@ -8,7 +8,12 @@ import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
 import { withRouter } from 'react-router-dom';
-
+import ListSubheader from '@material-ui/core/ListSubheader';
+import Collapse from '@material-ui/core/Collapse';
+import ExpandLess from '@material-ui/icons/ExpandLess';
+import ExpandMore from '@material-ui/icons/ExpandMore';
+import StarBorder from '@material-ui/icons/StarBorder';
+import './Drawser.scss';
 const useStyles = makeStyles({
   list: {
     width: 250,
@@ -25,7 +30,9 @@ function Drawser(props) {
     left: false,
     bottom: false,
     right: false,
+    open: false
   });
+  const [open, setOpen] = React.useState(true);
 
   const toggleDrawer = (side, open) => event => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -39,9 +46,14 @@ function Drawser(props) {
       props.changeOpen(false);
   }
   const handleClick = (type) => event => {
-        console.log(props.history)
+    setState({left: false});
+    props.changeOpen(false);
     props.history.push('/home')
   }
+
+  const handleClickCat = () => {
+    setOpen(!open);
+    };
 
   const sideList = side => (
     <div
@@ -51,12 +63,63 @@ function Drawser(props) {
       onKeyDown={toggleDrawer(side, false)}
     >
       <List>
-        {['Home', 'Categories', 'About Us', 'Contact Us'].map((text, index) => (
+        {/* {['Home', 'Categories', 'About Us', 'Contact Us'].map((text, index) => (
           <ListItem button key={text} onClick = {handleClick(text)}>
             <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
             <ListItemText primary={text} />
           </ListItem>
-        ))}
+        ))} */}
+          <ListItem button key={'Home'} onClick = {handleClick('Home')}>
+            <ListItemIcon>{0 % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+            <ListItemText primary={'Home'} />
+          </ListItem>
+          <ListItem button key={'Categories'} onClick={handleClickCat} className ="cat-container">
+            <ListItemIcon>{1 % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+            <ListItemText primary={'Categories'} />
+            {open ? <ExpandLess /> : <ExpandMore />}
+          </ListItem>
+          <Collapse in={open} timeout="auto" unmountOnExit>
+          <List component="div" disablePadding>
+            <ListItem button className="item-dr" onClick = {event => {setState({left: false});props.changeOpen(false);props.history.push('/items/1')}}>
+              <ListItemIcon>
+                <StarBorder />
+              </ListItemIcon>
+              <ListItemText primary="Shrimp" />
+            </ListItem>
+            <ListItem button className="item-dr" onClick = {event => { setState({left: false});props.changeOpen(false);props.history.push('/items/2')}}>
+              <ListItemIcon>
+                <StarBorder />
+              </ListItemIcon>
+              <ListItemText primary="Ca Mau Crabs" />
+            </ListItem>
+            <ListItem button className="item-dr" onClick = {event => { setState({left: false});props.changeOpen(false);props.history.push('/items/3')}}>
+              <ListItemIcon>
+                <StarBorder />
+              </ListItemIcon>
+              <ListItemText primary="Squid" />
+            </ListItem>
+            <ListItem button className="item-dr" onClick = {event => { setState({left: false});props.changeOpen(false);props.history.push('/items/4')}}>
+              <ListItemIcon>
+                <StarBorder />
+              </ListItemIcon>
+              <ListItemText primary="Fish" />
+            </ListItem>
+            <ListItem button className="item-dr" onClick = {event => { setState({left: false});props.changeOpen(false);props.history.push('/items/5')}}>
+              <ListItemIcon>
+                <StarBorder />
+              </ListItemIcon>
+              <ListItemText primary="Other Products" />
+            </ListItem>
+          </List>
+        </Collapse>
+          <ListItem button key={'About Us'} onClick = {handleClick('About Us')}>
+            <ListItemIcon>{2 % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+            <ListItemText primary={'About Us'} />
+          </ListItem>
+          <ListItem button key={'Contact Us'} onClick = {handleClick('Contact Us')}>
+            <ListItemIcon>{3 % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+            <ListItemText primary={'Contact Us'} />
+          </ListItem>
       </List>
       {/* <Divider />
       <List>
