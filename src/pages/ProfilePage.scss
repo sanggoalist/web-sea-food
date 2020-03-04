@@ -1,0 +1,34 @@
+.Profile {
+    height: 100%;
+    .ProfilePageContainer {
+        height: 100%;
+        padding: 50px;
+        .paper {
+            height: 100%;
+            .ChildContainer {
+                height: 100%;
+                padding: 50px;
+                .left-grid-container {
+                    height: 100%;
+                    .left-paper {
+                        height: 100%;
+                        .avatar-container {
+                            padding: 10px;
+                            .profile-avatar {
+                                height: 100%;
+                                width: 100%;
+                                
+                            }
+                        }
+                    }
+                }
+                .right-grid-container {
+                    height: 100%;
+                    .right-paper {
+                        height: 100%;
+                    }
+                }
+            }
+        }
+    }
+}

@@ -5,6 +5,7 @@ import Grid from '@material-ui/core/Grid';
 import '../pages/SellPage.scss';
 import ItemInfo from '../components/ItemInfo';
 import firebase from '../Firebase';
+import SpringModal from '../components/SpringModal';
 
 class SellPage extends React.Component {
     
@@ -12,7 +13,8 @@ class SellPage extends React.Component {
         super(props);
         this.moveToDetail = this.moveToDetail.bind(this);
         this.state = {
-            items: []
+            items: [],
+            isLoad: true
         }
     }
     componentDidMount(){
@@ -36,7 +38,7 @@ class SellPage extends React.Component {
         }
         const ref = firebase.database().ref(`users/${category}/sell`);
         ref.on('value', (snapshoot) => {
-          this.setState({items: (snapshoot.val() == null)? []:snapshoot.val()});
+          this.setState({items: (snapshoot.val() == null)? []:snapshoot.val(), isLoad: false});
         });
       } 
     moveToDetail(event, index){
@@ -50,18 +52,9 @@ class SellPage extends React.Component {
         this.props.history.push(`/items/${this.props.match.params['id']}/sell/${index-1}`);
     }
     render() {
-        // const list = [];
-        // for (let index = 0; index < 10; index++) {
-        //     list.push(<Grid key = {index} item xs={12}>
-        //                 <Paper  className = "paper" onClickCapture = {event => {this.moveToDetail(event, index)}}>
-        //                     <ItemInfo index = {index}></ItemInfo>
-        //                 </Paper>
-        //             </Grid>
-        //     );
-            
-        // }
       return (
         <div className="SellPage">
+             {(this.state.isLoad) ? <SpringModal load = {this.state.isLoad}/>: '' }
             <div className = "SellPageWrapper">
             <Grid container spacing={3} className = "SellPageContainer">
                     {this.state.items.map(item => {

@@ -8,6 +8,8 @@ import Bar from './components/Bar';
 import Drawser from './components/Drawser';
 import SellPage from './pages/SellPage';
 import ItemDetail from './components/ItemDetail';
+import TopBar from './components/TopBar';
+import ProfilePage from './pages/ProfilePage';
 function App() {
 
   const [state, setState] = React.useState({
@@ -29,13 +31,14 @@ function App() {
             <img src={logo} className="App-logo" alt="logo" />
           </header>
           <Bar changeOpen = {handleOpen}/>
+          <TopBar />
           <Drawser isOpen = {state.isOpen} changeOpen = {handleClose}/>
           <Route exact path="/" component={HomePage}/>
           <Route path="/home" component={HomePage}/>
           <Route  exact path="/items/:id" component={ItemPage}/>
           <Route exact path="/items/:id/sell" component={SellPage}/>
           <Route exact path="/items/:id/sell/:idd" component={ItemDetail}/>
-          {/* <Route path="/topics" component={Topics}/>     */}
+          <Route exact path="/user/profile" component={ProfilePage}/>    
     </div>
 
   </BrowserRouter>

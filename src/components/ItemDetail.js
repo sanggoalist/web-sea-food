@@ -3,6 +3,8 @@ import { withRouter } from 'react-router-dom';
 import './ItemDetail.scss';
 import Icon from '@material-ui/core/Icon';
 import firebase from '../Firebase';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import SpringModal from './SpringModal';
 
 
 class ItemDetail extends React.Component {
@@ -11,6 +13,7 @@ class ItemDetail extends React.Component {
         super(props);
         this.state = {
             isFaverite: false,
+            isLoad: true,
             item: {
                 id: 0,
                 location: "",
@@ -25,7 +28,7 @@ class ItemDetail extends React.Component {
     componentDidMount(){
         const ref = firebase.database().ref(`users/shrimp/sell/${this.props.match.params['idd']}`);
         ref.on('value', (snapshoot) => {
-            this.setState({item: snapshoot.val()});
+            this.setState({item: snapshoot.val(), isLoad: false});
         });
     }
     clickFavorite(){
@@ -33,7 +36,6 @@ class ItemDetail extends React.Component {
         const item =this.state.item;
         item.isFavor = !this.state.item.isFavor;
         ref.update(item).then(res => { 
-            this.setState({item: item});           
         }).catch(err => {
             console.log(err);
         })
@@ -41,20 +43,21 @@ class ItemDetail extends React.Component {
     render() {
       return (
         <div className="ItemDetail">
-                <div className ="detail-img-wrapper">
-                    <img src ="https://d213sdapb08052.cloudfront.net/assets/recipes/roasted-shrimp-cocktail/_entryTopPhotoLarge/39-roasted-shrimp-web-horizon.jpg?mtime=20160725113522" alt ="Detail Picture"></img>
-                </div>
-                <div className ="d-title-wrapper">
-                    <div className ="d-title">
-                        <div className ="dd-title">{this.state.item.title}</div>
-                        <Icon className = "dd-icon" fontSize = "large" onClick = {event => this.clickFavorite()}>{this.state.item.isFavor ? 'favorite': 'favorite_border'}</Icon>
+                    {(this.state.isLoad) ? <SpringModal load = {this.state.isLoad}/>: '' }
+                    <div className ="detail-img-wrapper">
+                        <img src ="https://d213sdapb08052.cloudfront.net/assets/recipes/roasted-shrimp-cocktail/_entryTopPhotoLarge/39-roasted-shrimp-web-horizon.jpg?mtime=20160725113522" alt ="Detail Picture"></img>
                     </div>
-                </div>
-                <div className ="d-content">
-                    <div className ="d-content-price">{this.state.item.price} $</div>
-                    <div className ="d-content-location"><Icon>place</Icon><div>{this.state.item.location}</div></div>
-                    <div className ="d-content-main">{this.state.item.content}</div>
-                </div>
+                    <div className ="d-title-wrapper">
+                        <div className ="d-title">
+                            <div className ="dd-title">{this.state.item.title}</div>
+                            <Icon className = "dd-icon" fontSize = "large" onClick = {event => this.clickFavorite()}>{this.state.item.isFavor ? 'favorite': 'favorite_border'}</Icon>
+                        </div>
+                    </div>
+                    <div className ="d-content">
+                        <div className ="d-content-price">{this.state.item.price} $</div>
+                        <div className ="d-content-location"><Icon>place</Icon><div>{this.state.item.location}</div></div>
+                        <div className ="d-content-main">{this.state.item.content}</div>
+                    </div>
         </div>
       );
     }
