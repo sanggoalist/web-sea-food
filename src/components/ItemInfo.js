@@ -19,7 +19,7 @@ class ItemInfo extends React.Component {
     }
     clickFavorite(){
         
-        const ref = firebase.database().ref(`users/shrimp/sell/${this.props.index - 1}`);
+        const ref = firebase.database().ref(`products/shrimp/sell/${this.props.index - 1}`);
         const item =this.props.item;
         item.isFavor = !this.state.isFaverite;
         ref.update(item).then(res => {

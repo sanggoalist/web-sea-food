@@ -17,7 +17,7 @@ class ItemPage extends React.Component {
       this.props.history.push(`/items/${this.props.match.params['id']}/sell`);
     }
     componentDidMount(){
-      // const ref = firebase.database().ref('users/shrimp/sell');
+      // const ref = firebase.database().ref('products/shrimp/sell');
       // ref.on('value', (snapshoot) => {
       //   console.log(snapshoot.val());
       // });

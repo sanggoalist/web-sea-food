@@ -26,13 +26,13 @@ class ItemDetail extends React.Component {
         this.clickFavorite = this.clickFavorite.bind(this);
     }
     componentDidMount(){
-        const ref = firebase.database().ref(`users/shrimp/sell/${this.props.match.params['idd']}`);
+        const ref = firebase.database().ref(`products/shrimp/sell/${this.props.match.params['idd']}`);
         ref.on('value', (snapshoot) => {
             this.setState({item: snapshoot.val(), isLoad: false});
         });
     }
     clickFavorite(){
-        const ref = firebase.database().ref(`users/shrimp/sell/${this.props.match.params['idd']}`);
+        const ref = firebase.database().ref(`products/shrimp/sell/${this.props.match.params['idd']}`);
         const item =this.state.item;
         item.isFavor = !this.state.item.isFavor;
         ref.update(item).then(res => { 

@@ -36,7 +36,7 @@ class SellPage extends React.Component {
          else {
             category = "shrimp";
         }
-        const ref = firebase.database().ref(`users/${category}/sell`);
+        const ref = firebase.database().ref(`products/${category}/sell`);
         ref.on('value', (snapshoot) => {
           this.setState({items: (snapshoot.val() == null)? []:snapshoot.val(), isLoad: false});
         });
