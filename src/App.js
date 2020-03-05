@@ -10,6 +10,7 @@ import SellPage from './pages/SellPage';
 import ItemDetail from './components/ItemDetail';
 import TopBar from './components/TopBar';
 import ProfilePage from './pages/ProfilePage';
+import PrivateRoute from './pages/PrivateRoute';
 function App() {
 
   const [state, setState] = React.useState({
@@ -38,7 +39,7 @@ function App() {
           <Route  exact path="/items/:id" component={ItemPage}/>
           <Route exact path="/items/:id/sell" component={SellPage}/>
           <Route exact path="/items/:id/sell/:idd" component={ItemDetail}/>
-          <Route exact path="/user/profile" component={ProfilePage}/>    
+          <PrivateRoute exact path="/user/profile" component={ProfilePage}/>    
     </div>
 
   </BrowserRouter>
