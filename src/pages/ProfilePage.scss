@@ -26,6 +26,22 @@
                     height: 100%;
                     .right-paper {
                         height: 100%;
+                        .right-container {
+                            padding: 50px;
+                            .form-ctl {
+                                width: 100%;
+                                margin-top: 20px;
+                                .form-control-label {
+                                    .email-text {
+                                        width: 100%;
+                                    }
+                                    span {
+                                        padding-right: 10px;
+                                    }
+                                }
+                            }
+
+                        }
                     }
                 }
             }
