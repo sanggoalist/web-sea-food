@@ -2,7 +2,7 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.scss';
 import HomePage from './pages/HomePage';
-import { BrowserRouter, Route } from "react-router-dom";
+import { BrowserRouter, Route, withRouter } from "react-router-dom";
 import ItemPage from './pages/ItemPage';
 import Bar from './components/Bar';
 import Drawser from './components/Drawser';
@@ -11,7 +11,7 @@ import ItemDetail from './components/ItemDetail';
 import TopBar from './components/TopBar';
 import ProfilePage from './pages/ProfilePage';
 import PrivateRoute from './pages/PrivateRoute';
-function App() {
+function App(props) {
 
   const [state, setState] = React.useState({
     isOpen: false,

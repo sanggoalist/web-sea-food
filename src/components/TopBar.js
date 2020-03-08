@@ -18,12 +18,17 @@ class TopBar extends React.Component {
     constructor(props){
         super(props);
         this.handleClick = this.handleClick.bind(this);
+        this.goBack = this.goBack.bind(this);
     }
 
     handleClick(event, key) {
         event.preventDefault();
         console.log(this.props)
         this.props.history.push(`/${key}`);
+    }
+
+    goBack(event){
+        this.props.history.goBack();
     }
 
     render() {
@@ -227,17 +232,17 @@ class TopBar extends React.Component {
         } 
         
         else {
-            list.push(
-                <Typography key ="home" color="textPrimary" className ="item-topbar">
-                    <HomeIcon />
-                    Home
-                </Typography>
-            );
+            // list.push(
+            //     <Typography key ="home" color="textPrimary" className ="item-topbar">
+            //         <HomeIcon />
+            //         Home
+            //     </Typography>
+            // );
         }
       return (
         <div className="TopBar">
 
-                {(this.props.location.pathname !== '/home')? <Button onClick ={event => {this.props.history.goBack()}} className ="topbar-button" variant="contained" color="primary" startIcon={<Icon>arrow_back_ios</Icon>}>
+                {(this.props.location.pathname !== '/home' && this.props.location.pathname !== '' && this.props.location.pathname !== '/login' && !this.props.location.pathname.includes("user"))? <Button onClick ={event => {this.goBack(event)}} className ="topbar-button" variant="contained" color="primary" startIcon={<Icon>arrow_back_ios</Icon>}>
                     Go Back
                 </Button>: ''}
                 <Breadcrumbs aria-label="breadcrumb">

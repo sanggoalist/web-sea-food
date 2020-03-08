@@ -167,6 +167,7 @@ const useStyles = makeStyles(theme => ({
   
     return (
       <div className={classes.grow}>
+        {props.location.pathname !== '/login' ?
         <AppBar position="static">
           <Toolbar>
             <IconButton
@@ -229,9 +230,9 @@ const useStyles = makeStyles(theme => ({
               </IconButton>
             </div>
           </Toolbar>
-        </AppBar>
-        {renderMobileMenu}
-        {renderMenu}
+        </AppBar> : ''}
+        {props.location.pathname !== '/login' ? renderMobileMenu: ''}
+        {props.location.pathname !== '/login' ? renderMenu : ''}
       </div>
     );
   }
