@@ -11,6 +11,7 @@ import ItemDetail from './components/ItemDetail';
 import TopBar from './components/TopBar';
 import ProfilePage from './pages/ProfilePage';
 import PrivateRoute from './pages/PrivateRoute';
+import LoginPage from './pages/LoginPage';
 function App(props) {
 
   const [state, setState] = React.useState({
@@ -39,6 +40,7 @@ function App(props) {
           <Route  exact path="/items/:id" component={ItemPage}/>
           <Route exact path="/items/:id/sell" component={SellPage}/>
           <Route exact path="/items/:id/sell/:idd" component={ItemDetail}/>
+          <Route exact path="/login" component={LoginPage}/>
           <PrivateRoute exact path="/user/profile" component={ProfilePage}/>    
     </div>
 
