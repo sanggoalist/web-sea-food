@@ -7,11 +7,14 @@ import {
   withRouter
 } from 'react-router-dom';
 
-const PrivateRoute = ({ component: Component, ...rest }) => (
-    <Route {...rest} render={(props) => (
-     1 === 1
+const PrivateRoute = ({ component: Component, ...rest }) => {
+  
+  return (
+
+     <Route {...rest} render={(props) => (
+      localStorage.getItem("userItem")
         ? <Component {...props} />
         : <Redirect to='/login' />
     )} />
-  )
+  )};
   export default PrivateRoute;

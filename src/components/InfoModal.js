@@ -59,6 +59,7 @@ export default function InfoModal(props) {
   };
 
   const handleClose = () => {
+    props.closeFunc();
     setOpen(false);
   };
   

@@ -13,8 +13,12 @@ import FormControl from '@material-ui/core/FormControl';
 import TextField from '@material-ui/core/TextField';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import './LoginPage.scss';
+import SpringModal from '../components/SpringModal';
+import firebase from '../Firebase';
+import InfoModal from '../components/InfoModal';
 class LoginPage extends React.Component {
     
     constructor(props){
@@ -26,13 +30,17 @@ class LoginPage extends React.Component {
             userNameErr: false,
             passwordErr: false,
             userNameErrText: "",
-            passwordErrText: ""            
+            passwordErrText: "",
+            isLoading: false,
+            loaded: false,
+            infoText: ""            
         }
         this.handleClickShowPassword = this.handleClickShowPassword.bind(this);
         this.handleMouseDownPassword = this.handleMouseDownPassword.bind(this);
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
         this.handleUsernameChange = this.handleUsernameChange.bind(this);
         this.handleLogin = this.handleLogin.bind(this);
+        this.closeModal = this.closeModal.bind(this);
     }
 
     handleClickShowPassword(){
@@ -42,6 +50,9 @@ class LoginPage extends React.Component {
     handleMouseDownPassword(event){
         event.preventDefault();
     };
+    closeModal(event){
+        this.setState({loaded: false, infoText: ""});
+    }
     handlePasswordChange(event){
         if (!event.target.value) {
             this.setState({passwordErr: true, passwordErrText: "Password is required."})
@@ -62,9 +73,62 @@ class LoginPage extends React.Component {
         this.setState({username: event.target.value});
     }
     handleLogin(event) {
+        
+        if (this.state.username.length === 0 || this.state.password.length === 0) {
+            return;
+        }
         if (this.state.userNameErr || this.state.passwordErr) {
             return;
         }
+        this.setState({loaded: false, infoText: ""});
+        this.setState({isLoading: true});
+        const checkRef = firebase.database().ref(`user_checks`);
+
+        checkRef.on('value', (snapshoot) => {
+            var checks = [];
+            var userId = null;
+            checks = snapshoot.val();
+            var isHad = false;
+            for (let index = 0; index < checks.length; index++) {
+                const element = checks[index];
+                if (element["username"] === this.state.username || element["email"] ===  this.state.username){
+                    isHad = true;
+                    userId = element["id"];
+                }
+                
+            }
+            if (!isHad){
+                this.setState({isLoading: false});
+                this.setState({loaded: true, infoText: "User is not valid."})
+                return;
+            }
+            const authRef = firebase.database().ref(`auths/${userId}`);
+            authRef.on('value', (snapshoot => {
+                this.setState({isLoading: false});
+                if (!snapshoot.val()){
+                    this.setState({loaded: true, infoText: "Server Error."})
+                    return;
+                }
+                var item = snapshoot.val();
+                if ((item["password"] + '') !== this.state.password){
+                    this.setState({loaded: true, infoText: "Username or Password is incorrect."})
+                    return;
+                } else {
+                    var user = {};
+                    user["username"] = item["username"];
+                    user["email"] = item["email"];
+                    user["userId"] = userId;
+                    localStorage.setItem("userItem", JSON.stringify(user));
+                    this.setState({loaded: true, infoText: "Login Success!"});
+                    this.props.history.push("/home");
+                }
+                
+    
+            }));
+        });
+
+
+
         
     }
     render() {
@@ -77,6 +141,11 @@ class LoginPage extends React.Component {
                 <Grid item xs={6}>
                 <Paper className = "paper">
                     <div className = "login-item-wrapper">
+                        <div className = "login-item">
+                        <Typography variant="h3" gutterBottom>
+                            Login
+                        </Typography>                            
+                        </div>
                         <div className = "login-item">
                             <FormControl variant="outlined" className = "form-field" error  = {this.state.userNameErr}>
                                 <InputLabel htmlFor="filled-adornment-username">Username</InputLabel>
@@ -134,6 +203,9 @@ class LoginPage extends React.Component {
                 </Grid>
             </Grid>
             </div>
+            {(this.state.loaded) ?<InfoModal closeFunc ={event => {this.closeModal()}} load = {this.state.loaded} text ={this.state.infoText}/> : ""}
+            {/* {(this.state.failed) ?<InfoModal load = {this.state.failed} text = "ERROR"/> : ""} */}
+            {(this.state.isLoading) ? <SpringModal load = {this.state.isLoading}/>: '' }
         </div>
       );
     }

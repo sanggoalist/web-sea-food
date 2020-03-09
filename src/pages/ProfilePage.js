@@ -19,6 +19,7 @@ import IconButton from '@material-ui/core/IconButton';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import InfoModal from '../components/InfoModal';
 import SpringModal from '../components/SpringModal';
+import PhotoCamera from '@material-ui/icons/PhotoCamera';
 
 class ProfilePage extends React.Component {
     
@@ -50,7 +51,8 @@ class ProfilePage extends React.Component {
         fullnameErrText: "",
         saved: false,
         failed: false,
-        loading: false
+        loading: false,
+        file: null
       }
       this.handleFullname = this.handleFullname.bind(this);
       this.handleClickShowPassword = this.handleClickShowPassword.bind(this);
@@ -59,14 +61,17 @@ class ProfilePage extends React.Component {
       this.handleUserName = this.handleUserName.bind(this);
       this.handlePassword = this.handlePassword.bind(this);
       this.handleSave = this.handleSave.bind(this);
+      this.closeModal = this.closeModal.bind(this);
+      this.uploadImage = this.uploadImage.bind(this);
     }
 
     componentDidMount(){
-      const ref = firebase.database().ref(`users/${111111}`);
+      const userId = +JSON.parse(localStorage.getItem("userItem"))["userId"];
+      const ref = firebase.database().ref(`users/${userId}`);
       ref.on('value', (snapshoot) => {
           this.setState({item: snapshoot.val()});
       });
-      const authRef = firebase.database().ref(`auths/${111111}`);
+      const authRef = firebase.database().ref(`auths/${userId}`);
       authRef.on('value', (snapshoot) => {
         this.setState({auth: snapshoot.val()});
     });
@@ -117,6 +122,9 @@ class ProfilePage extends React.Component {
     }
     this.setState({item: item});
   }
+  closeModal(event){
+    this.setState({saved: false, failed: false});
+  }
   handlePassword(event){
     const item = this.state.auth;
     item.password = event.target.value;
@@ -137,19 +145,76 @@ class ProfilePage extends React.Component {
     if (this.state.passErr || this.state.usernameErr || this.state.fullnameErr || this.state.emailErr) {
         return;
     }
+    const userId = +JSON.parse(localStorage.getItem("userItem"))["userId"];
+    
     this.setState({loading: true});
-    const ref = firebase.database().ref(`users/${111111}`);
-    ref.update(this.state.item).then(res => {
-        this.setState({loading: false});
-        this.setState({saved: true});
-        
-    }).catch(err => {
-        this.setState({loading: false});
-        this.setState({failed: true});
+    const ref = firebase.database().ref(`users/${userId}`);
+    const checkRef = firebase.database().ref(`user_checks`);
+    checkRef.on('value', res => {
+        var checks = [];
+        checks = res.val();
+        var ind = 0;
+        for (let index = 0; index < checks.length; index++) {
+          const element = checks[index];
+          if (element["id"] === userId){
+            ind = index;
+            break;
+          }
+        }
+        const authRef = firebase.database().ref(`auths/${userId}`);
+        Promise.all([firebase.database().ref(`user_checks/${ind}`).update({
+          email: this.state.item.email,
+          username: this.state.item.username,
+          id: userId
+        }), ref.update(this.state.item), authRef.update({
+          email: this.state.item.email,
+          username: this.state.item.username,
+          password: this.state.auth.password      
+        })]).then(res => {
+
+          var user = {};
+          this.setState({loading: false});
+          this.setState({saved: true});
+
+          user["username"] = this.state.item.username;
+          user["email"] = this.state.item.email;
+          user["userId"] = userId;
+          localStorage.setItem("userItem", JSON.stringify(user));
+            
+        }).catch(err => {
+          
+            this.setState({loading: false});
+            this.setState({failed: true});
+        });
     });
+    // ref.update(this.state.item).then(res => {
+    //     this.setState({loading: false});
+    //     this.setState({saved: true});
+        
+    // }).catch(err => {
+    //     this.setState({loading: false});
+    //     this.setState({failed: true});
+    // });
 
 
   }
+  uploadImage(event){
+    if (event.target.files[0]){
+      this.setState({loading: true});
+      const userId = +JSON.parse(localStorage.getItem("userItem"))["userId"];
+      firebase.storage().ref(`/images/${userId}`).put(event.target.files[0], {contentEncoding: ''}).then(res => {
+        const userId = +JSON.parse(localStorage.getItem("userItem"))["userId"];
+        firebase.storage().ref(`/images/${userId}`).getDownloadURL().then(res => {
+            const ref = firebase.database().ref(`users/${userId}`);
+            var item = this.state.item;
+            item.info.img = res;
+            ref.update(this.state.item).then(snap => {
+                this.setState({item: item, loading: false});
+            });
+      });
+    });    
+  }
+}
     render() {
       return (
         <div className="Profile">
@@ -160,7 +225,14 @@ class ProfilePage extends React.Component {
                           <Grid item xs={3} className ="left-grid-container">
                             <Paper  className = "left-paper" >
                                 <div className ="avatar-container">
-                                    <Avatar className = "profile-avatar" alt="User Avatar" src={this.state.item.info.img}></Avatar>
+                                    <Avatar className = "profile-avatar" alt="User Avatar" src={this.state.item.info.img}>
+                                    </Avatar>
+                                    <input accept="image/*" id="icon-button-file" type="file" onChange = {event => {this.uploadImage(event)}} />
+                                      <label htmlFor="icon-button-file">
+                                        <IconButton color="primary" aria-label="upload picture" component="span">
+                                          <PhotoCamera />
+                                        </IconButton>
+                                      </label>
                                 </div>
                                 <div>{this.state.item.info.fullname}</div>
                                 <div>Age: {this.state.item.info.age}</div>
@@ -268,8 +340,8 @@ class ProfilePage extends React.Component {
                         </Paper>
                     </Grid>                       
             </Grid>
-            {(this.state.saved) ?<InfoModal load = {this.state.saved} text ="SUCCESS"/> : ""}
-            {(this.state.failed) ?<InfoModal load = {this.state.failed} text = "ERROR"/> : ""}
+            {(this.state.saved) ?<InfoModal closeFunc ={event => {this.closeModal()}} load = {this.state.saved} text ="SUCCESS"/> : ""}
+            {(this.state.failed) ?<InfoModal closeFunc ={event => {this.closeModal()}} load = {this.state.failed} text = "ERROR"/> : ""}
             {(this.state.loading) ?<SpringModal load = {this.state.loading}/> : ""}
         </div>
       );
