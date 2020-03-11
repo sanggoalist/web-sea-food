@@ -12,6 +12,10 @@ import TopBar from './components/TopBar';
 import ProfilePage from './pages/ProfilePage';
 import PrivateRoute from './pages/PrivateRoute';
 import LoginPage from './pages/LoginPage';
+import LoginRoute from './pages/LoginRoute';
+import DefaultRoute from './pages/DefaultRoute';
+import RegisterPage from './pages/RegisterPage';
+import UnAuthRoute from './pages/UnAuthRoute';
 function App(props) {
 
   const [state, setState] = React.useState({
@@ -35,13 +39,14 @@ function App(props) {
           <Bar changeOpen = {handleOpen}/>
           <TopBar />
           <Drawser isOpen = {state.isOpen} changeOpen = {handleClose}/>
-          <Route exact path="/" component={HomePage}/>
-          <Route path="/home" component={HomePage}/>
+          {/* <DefaultRoute path="/" component={HomePage}/> */}
+          <Route exact path="/home" component={HomePage}/>
           <Route  exact path="/items/:id" component={ItemPage}/>
           <Route exact path="/items/:id/sell" component={SellPage}/>
           <Route exact path="/items/:id/sell/:idd" component={ItemDetail}/>
-          <Route exact path="/login" component={LoginPage}/>
-          <PrivateRoute exact path="/user/profile" component={ProfilePage}/>    
+          <LoginRoute exact path= "/login" component={LoginPage}/>
+          <UnAuthRoute exact path= "/user/register" component = {RegisterPage}/>
+          <PrivateRoute exact path="/user/profile" component={ProfilePage}/>
     </div>
 
   </BrowserRouter>

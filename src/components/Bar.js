@@ -15,6 +15,8 @@ import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import { withRouter } from 'react-router-dom';
+import Avatar from '@material-ui/core/Avatar';
+
 
 const useStyles = makeStyles(theme => ({
     grow: {
@@ -94,7 +96,25 @@ const useStyles = makeStyles(theme => ({
     };
   
     const handleMenuClose = () => {
+      // props.history.push('/user/profile');
+      setAnchorEl(null);
+      handleMobileMenuClose();
+    };
+
+    const handleLogout = () => {
+      localStorage.clear();
+      props.history.push('/home');
+      setAnchorEl(null);
+      handleMobileMenuClose();
+    };
+
+    const handleOpenProfile = () => {
       props.history.push('/user/profile');
+      setAnchorEl(null);
+      handleMobileMenuClose();
+    };
+    const handleLogin = () => {
+      props.history.push('/login');
       setAnchorEl(null);
       handleMobileMenuClose();
     };
@@ -119,11 +139,17 @@ const useStyles = makeStyles(theme => ({
         open={isMenuOpen}
         onClose={handleMenuClose}
       >
-        <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-        <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+        {
+          (JSON.parse(localStorage.getItem("userItem")) !== null)
+          ? <MenuItem onClick={handleOpenProfile}>Profile</MenuItem>: <MenuItem onClick={handleLogin}>Login</MenuItem>
+        }
+        {
+          (JSON.parse(localStorage.getItem("userItem")) !== null)
+          ? <MenuItem onClick={handleLogout}>Logout</MenuItem>: ''
+        }        
+        
       </Menu>
     );
-  
     const mobileMenuId = 'primary-search-account-menu-mobile';
     const renderMobileMenu = (
       <Menu
@@ -151,15 +177,23 @@ const useStyles = makeStyles(theme => ({
           </IconButton>
           <p>Notifications</p>
         </MenuItem>
-        <MenuItem onClick={handleProfileMenuOpen}>
+        <MenuItem >
+
+          {(JSON.parse(localStorage.getItem("userItem")) == null)
+          ? 
           <IconButton
             aria-label="account of current user"
             aria-controls="primary-search-account-menu"
             aria-haspopup="true"
             color="inherit"
+            onClick={handleProfileMenuOpen}
           >
             <AccountCircle />
           </IconButton>
+          :
+          <Avatar className = "profile-avatar" alt="User Avatar" src={JSON.parse(localStorage.getItem("userItem"))["img"]}>
+          </Avatar>
+          }
           <p>Profile</p>
         </MenuItem>
       </Menu>
@@ -215,8 +249,15 @@ const useStyles = makeStyles(theme => ({
                 onClick={handleProfileMenuOpen}
                 color="inherit"
               >
-                <AccountCircle />
+              {(JSON.parse(localStorage.getItem("userItem")) == null)
+                ? 
+                  <AccountCircle />
+                :
+                <Avatar className = "profile-avatar" alt="User Avatar" src={JSON.parse(localStorage.getItem("userItem"))["img"]}>
+                </Avatar>
+                }
               </IconButton>
+
             </div>
             <div className={classes.sectionMobile}>
               <IconButton

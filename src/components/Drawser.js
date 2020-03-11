@@ -32,7 +32,7 @@ function Drawser(props) {
     right: false,
     open: false
   });
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
 
   const toggleDrawer = (side, open) => event => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -48,8 +48,25 @@ function Drawser(props) {
   const handleClick = (type) => event => {
     setState({left: false});
     props.changeOpen(false);
-    props.history.push('/home')
+    props.history.push('/home');
   }
+  const handleProfile = (type) => event => {
+    setState({left: false});
+    props.changeOpen(false);
+    props.history.push('/user/profile');
+  }
+  const handleLogout = (type) => event => {
+    setState({left: false});
+    props.changeOpen(false);
+    localStorage.clear();
+    props.history.push('/home');
+  }
+  const handleLogin = (type) => event => {
+    setState({left: false});
+    props.changeOpen(false);
+    props.history.push('/login');
+  }
+
 
   const handleClickCat = () => {
     setOpen(!open);
@@ -120,6 +137,28 @@ function Drawser(props) {
             <ListItemIcon>{3 % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
             <ListItemText primary={'Contact Us'} />
           </ListItem>
+          {
+            (JSON.parse(localStorage.getItem("userItem")) !== null)
+            ? 
+          <ListItem button key={'Profile'} onClick = {handleProfile('profile')}>
+            <ListItemIcon>{4 % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+            <ListItemText primary={'Profile'} />
+          </ListItem> 
+          :
+          <ListItem button key={'Login'} onClick = {handleLogin('Login')}>
+            <ListItemIcon>{4 % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+            <ListItemText primary={'Login'} />
+          </ListItem>
+          }
+          {
+            (JSON.parse(localStorage.getItem("userItem")) !== null)
+            ?             
+          <ListItem button key={'Logout'} onClick = {handleLogout('profile')}>
+            <ListItemIcon>{5 % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+            <ListItemText primary={'Logout'} />
+          </ListItem>
+            : '' 
+          }
       </List>
       {/* <Divider />
       <List>

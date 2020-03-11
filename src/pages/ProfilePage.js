@@ -208,7 +208,10 @@ class ProfilePage extends React.Component {
             const ref = firebase.database().ref(`users/${userId}`);
             var item = this.state.item;
             item.info.img = res;
-            ref.update(this.state.item).then(snap => {
+            ref.update(item).then(snap => {
+                var user = JSON.parse(localStorage.getItem("userItem"));
+                user["img"] = res;
+                localStorage.setItem("userItem", JSON.stringify(user));
                 this.setState({item: item, loading: false});
             });
       });

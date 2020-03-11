@@ -242,7 +242,7 @@ class TopBar extends React.Component {
       return (
         <div className="TopBar">
 
-                {(this.props.location.pathname !== '/home' && this.props.location.pathname !== '' && this.props.location.pathname !== '/login' && !this.props.location.pathname.includes("user"))? <Button onClick ={event => {this.goBack(event)}} className ="topbar-button" variant="contained" color="primary" startIcon={<Icon>arrow_back_ios</Icon>}>
+                {(this.props.location.pathname !== '/home' && this.props.location.pathname !== '/' && this.props.location.pathname !== '/login' && !this.props.location.pathname.includes("user"))? <Button onClick ={event => {this.goBack(event)}} className ="topbar-button" variant="contained" color="primary" startIcon={<Icon>arrow_back_ios</Icon>}>
                     Go Back
                 </Button>: ''}
                 <Breadcrumbs aria-label="breadcrumb">

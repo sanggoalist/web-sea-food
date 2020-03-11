@@ -118,9 +118,15 @@ class LoginPage extends React.Component {
                     user["username"] = item["username"];
                     user["email"] = item["email"];
                     user["userId"] = userId;
-                    localStorage.setItem("userItem", JSON.stringify(user));
-                    this.setState({loaded: true, infoText: "Login Success!"});
-                    this.props.history.push("/home");
+                    const ref = firebase.database().ref(`users/${userId}`);
+                    ref.on('value', item => {
+                        console.log(item);
+                        user["img"] = item.val()["info"]["img"];
+                        localStorage.setItem("userItem", JSON.stringify(user));
+                        this.setState({loaded: true, infoText: "Login Success!"});
+                        this.props.history.push("/home");
+                    });
+
                 }
                 
     
