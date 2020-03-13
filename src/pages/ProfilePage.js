@@ -104,6 +104,9 @@ class ProfilePage extends React.Component {
       this.setState({emailErr: true, emailErrText: "Email is required."});
       return;      
     }
+    if (!new RegExp(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,15}/g).test(event.target.value)){
+      this.setState({emailErr: true, emailErrText: 'Email is incorrect!'});
+    }
     if (item.email.length > 50){
       return;
     }
