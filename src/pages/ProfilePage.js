@@ -225,10 +225,10 @@ class ProfilePage extends React.Component {
       return (
         <div className="Profile">
             <Grid container spacing={0} className = "ProfilePageContainer">
-                    <Grid item xs={12} className ="grid-container">
+                    <Grid item xs={12}  sm = {12} className ="grid-container">
                         <Paper  className = "paper" >
                         <Grid container spacing={3} className = "ChildContainer">
-                          <Grid item xs={3} className ="left-grid-container">
+                          <Grid item xs={12} sm = {3} className ="left-grid-container">
                             <Paper  className = "left-paper" >
                                 <div className ="avatar-container">
                                     <Avatar className = "profile-avatar" alt="User Avatar" src={this.state.item.info.img}>
@@ -245,7 +245,7 @@ class ProfilePage extends React.Component {
                                 <div>Gender: {(this.state.item.info.gender === 1) ?'Male': 'Female'}</div>
                             </Paper>
                           </Grid>
-                          <Grid item xs={9} className ="right-grid-container">
+                          <Grid item xs={12} sm = {9} className ="right-grid-container">
                             <Paper  className = "right-paper">
                               <div className ="right-container">
 

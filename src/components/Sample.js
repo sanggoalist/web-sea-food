@@ -2,9 +2,9 @@ import React from 'react';
 
 class Sample extends React.Component {
     
-    constructor(){
-
-    }
+  constructor(props){
+    super(props);
+  }
     render() {
       return (
         <div className="Sample">
