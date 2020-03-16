@@ -1,4 +1,13 @@
 .UserInfoPage {
-    width: calc(100% - 24px);
-    padding-left: 12px;
+  width: calc(100% - 24px);
+  padding-left: 12px;
+  .display-info {
+    height: 100%;
+  }
+  .content-info {
+    min-height: 400px;
+    .content-info-paper {
+      height: 100%;
+    }
+  }
 }

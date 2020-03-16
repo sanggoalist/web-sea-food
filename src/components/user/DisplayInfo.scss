@@ -1,0 +1,12 @@
+.DisplayInfo {
+  .DisplayInfoWrapper {
+    .profile-avatar {
+      height: 12em;
+      width: 12em;
+      margin-left: calc((100% - 12em) / 2);
+    }
+    input {
+      display: none;
+    }
+  }
+}
