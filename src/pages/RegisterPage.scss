@@ -3,10 +3,11 @@
     height: 100%;
     position: relative;
     .RegisterPageWrapper {
+        height: 100%;
         position: absolute;
-        top: 50%;
+        top: 0;
         right: 50%;
-        transform: translate3d(50%, -50%, 0);
+        transform: translate3d(50%, 50%, 0);
         // width: 100%;
         .paper {
             .register-item-wrapper {
@@ -19,6 +20,9 @@
                     min-width: 300px;
                     .form-field {
                         width: 100%;
+                    }
+                    &:last-child {
+                        margin-bottom: 50px;
                     }
                 }
             }

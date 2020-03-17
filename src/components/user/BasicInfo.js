@@ -83,11 +83,8 @@ class BasicInfo extends React.Component {
 
       //Age
 
-      if (type === 2 && value.length > 5) {
-        return;
-      }
       if (type === 2 && value.length > 0) {
-        if (Number.isNaN(Number.parseInt(value))) {
+        if (Number.isNaN(+value)) {
           err.info[`${element}`] = true;
           errText.info[`${element}`] = "Age should be number format.";
           this.setState({ error: err, errorText: errText });
@@ -97,6 +94,9 @@ class BasicInfo extends React.Component {
             errText.info[`${element}`] = "Age should be positive number.";
             this.setState({ error: err, errorText: errText });
           }
+        }
+        if (value.length > 5) {
+          return;
         }
       }
 
@@ -121,8 +121,21 @@ class BasicInfo extends React.Component {
     }
     this.setState({ saveLoading: true });
     const ref = firebase.database().ref(`users/${this.props.userId}`);
-    ref
-      .update(item)
+    const nameRef = firebase
+      .database()
+      .ref(`public_info/${this.props.userId}/name`);
+    const ageRef = firebase
+      .database()
+      .ref(`public_info/${this.props.userId}/age`);
+    const genderRef = firebase
+      .database()
+      .ref(`public_info/${this.props.userId}/gender`);
+    Promise.all([
+      ref.update(item),
+      nameRef.set(this.state.user.info.fullname),
+      ageRef.set(this.state.user.info.age),
+      genderRef.set(this.state.user.info.gender)
+    ])
       .then(res => {
         this.setState({ saveLoading: false });
         this.setState({ infoLoading: true, infoText: "Success!!!" });
@@ -176,7 +189,7 @@ class BasicInfo extends React.Component {
                 <InputLabel htmlFor="filled-adornment-age">Age</InputLabel>
                 <OutlinedInput
                   id="filled-adornment-age"
-                  type={"number"}
+                  type={"text"}
                   value={this.state.user.info.age}
                   onChange={event => {
                     this.handleChange(event, ["age"], [2], false);

@@ -1,0 +1,17 @@
+.ContactInfo {
+  .ContactInfoWrapper {
+    .contact-item {
+      padding: 10px;
+      max-width: 300px;
+      .form-field {
+        width: 100%;
+        legend {
+          text-align: left;
+        }
+      }
+      &.button {
+        float: right;
+      }
+    }
+  }
+}

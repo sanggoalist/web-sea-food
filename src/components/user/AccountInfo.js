@@ -86,9 +86,17 @@ class AccountInfo extends React.Component {
     const ref = firebase.database().ref(`users/${this.props.userId}`);
     const authRef = firebase.database().ref(`auths/${this.props.userId}`);
     const checkRef = firebase.database().ref(`user_checks/${this.state.ind}`);
+    const usernameRef = firebase
+      .database()
+      .ref(`public_info/${this.props.userId}/username`);
+    const emailRef = firebase
+      .database()
+      .ref(`public_info/${this.props.userId}/email`);
     Promise.all([
       ref.update(item),
       authRef.update(auth),
+      usernameRef.set(this.state.item.username),
+      emailRef.set(this.state.item.email),
       checkRef.update({
         email: this.state.item.email,
         username: this.state.item.username,

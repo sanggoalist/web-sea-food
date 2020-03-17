@@ -15,6 +15,7 @@ import { useTheme } from "@material-ui/core/styles";
 import BasicInfo from "../components/user/BasicInfo";
 import AccountInfo from "../components/user/AccountInfo";
 import DisplayInfo from "../components/user/DisplayInfo";
+import ContactInfo from "../components/user/ContactInfo";
 
 class UserInfoPage extends React.Component {
   constructor(props) {
@@ -90,7 +91,7 @@ class UserInfoPage extends React.Component {
                   <BasicInfo userId={userId} />
                 </TabPanel>
                 <TabPanel value={this.state.value} index={1}>
-                  Item Two
+                  <ContactInfo userId={userId} />
                 </TabPanel>
                 <TabPanel value={this.state.value} index={2}>
                   <AccountInfo userId={userId} />

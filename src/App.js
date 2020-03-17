@@ -48,7 +48,7 @@ function App(props) {
           <PrivateRoute exact path="/user/user-info" component={UserInfoPage}/>
           <LoginRoute exact path= "/login" component={LoginPage}/>
           <UnAuthRoute exact path= "/user/register" component = {RegisterPage}/>
-          <PrivateRoute exact path="/user/profile" component={ProfilePage}/>
+          <PrivateRoute exact path="/user/profile" component={UserInfoPage}/>
     </div>
 
   </BrowserRouter>

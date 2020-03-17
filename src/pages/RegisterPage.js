@@ -35,6 +35,15 @@ class RegisterPage extends React.Component {
             email: "",
             fullname: "",
             age: "",
+            address: "",
+            phone: "",
+            mobile_phone: "",
+            addressErr: false,
+            phoneErr: false,
+            mobilePhoneErr: false,
+            addressErrText: "",
+            phoneErrText: "",
+            mobilePhoneErrText: "",            
             gender: 0,
             ageErr: false,
             ageErrText: "",
@@ -58,8 +67,12 @@ class RegisterPage extends React.Component {
         this.handleMouseDownPassword = this.handleMouseDownPassword.bind(this);
         this.handleAgeChange = this.handleAgeChange.bind(this);
         this.handleGenderChange = this.handleGenderChange.bind(this);
+        this.handleAddressChange = this.handleAddressChange.bind(this);
+        this.handlePhoneChange = this.handlePhoneChange.bind(this);
+        this.handleMobilePhoneChange = this.handleMobilePhoneChange.bind(this);
         this.closeModal = this.closeModal.bind(this);
         this.handleRegister = this.handleRegister.bind(this);
+        this.checkBeforeRegister = this.checkBeforeRegister.bind(this);
     }
     handleClickShowPassword(){
         this.setState({showPassword: !this.state.showPassword });
@@ -136,7 +149,7 @@ class RegisterPage extends React.Component {
         this.setState({ageErr: false, ageErrText: ""});
         const value = (!isClick)?event.target.value: this.state.age;
         if (value.length > 0){
-            if (Number.isNaN(Number.parseInt(value))){
+            if (Number.isNaN(+value)){
                 this.setState({ageErr: true, ageErrText: "Age should be number format"});
     
             } else {
@@ -151,19 +164,81 @@ class RegisterPage extends React.Component {
         if (!isClick)
         this.setState({age: value});
     }
+    handleAddressChange(event, isClick) {
+        if (!isClick)
+        this.setState({addressErr: false, addressErrText: ''});
+        const value = (!isClick)?event.target.value: this.state.address;
+        if (!value){
+            this.setState({addressErr: true, addressErrText: 'Address is required.'});
+        } else {
+             if (value.length > 500) {
+                this.setState({addressErr: true, addressErrText: 'Address is less than 500 characters.'});
+            } 
+        }
+        if (!isClick)
+        this.setState({address: value});
+    }
+    handlePhoneChange(event, isClick) {
+        if (!isClick)
+        this.setState({phoneErr: false, phoneErrText: ''});
+        const value = (!isClick)?event.target.value: this.state.phone;
+        if (!value){
+            this.setState({phoneErr: true, phoneErrText: 'Phone number is required.'});
+        } else {
+            if (!new RegExp(/^[0-9]*$/).test(value)){
+                this.setState({phoneErr: true, phoneErrText: 'Phone number is incorrect!'});
+            }
+             if (value.length > 15) {
+                return;
+            } 
+        }
+        if (!isClick)
+        this.setState({phone: value});
+    }
+    handleMobilePhoneChange(event, isClick) {
+        if (!isClick)
+        this.setState({mobilePhoneErr: false, mobilePhoneErrText: ''});
+        const value = (!isClick)?event.target.value: this.state.mobile_phone;
+        if (!value){
+            this.setState({mobilePhoneErr: true, mobilePhoneErrText: 'Mobile Phone Number is required.'});
+        } else {
+            if (!new RegExp(/^[0-9]*$/).test(value)){
+                this.setState({mobilePhoneErr: true, mobilePhoneErrText: 'Mobile Phone Number is incorrect!'});
+            }
+             if (value.length > 15) {
+                return;
+            } 
+        }
+        if (!isClick)
+        this.setState({mobile_phone: value});
+    }
     handleGenderChange(event){
         this.setState({gender: +event.target.value})
-    }
-    handleRegister(event) {
+    } 
+    checkBeforeRegister(event) {
         this.handleUsernameChange(event, true);
         this.handleEmailChange(event, true);
         this.handleFullNameChange(event, true);
         this.handlePasswordChange(event, true);
         this.handleAgeChange(event, true);
-        if (this.state.userNameErr || this.state.emailErr || this.state.fullnameErr || this.state.passwordErr || this.state.ageErr) {
+        this.handleAddressChange(event, true);
+        this.handlePhoneChange(event, true);
+        this.handleMobilePhoneChange(event, true);
+        this.setState({isLoading: true});
+        setTimeout(() => {
+            this.handleRegister(event);
+        }, 1000);
+    }
+    handleRegister(event) {
+
+
+        if ((this.state.userNameErr || this.state.emailErr || this.state.fullnameErr || 
+            this.state.passwordErr || this.state.ageErr || this.state.addressErr || this.state.phoneErr
+            || this.state.mobilePhoneErr)) {
+                console.log("Error")
             return;
         }
-        this.setState({isLoading: true});
+        
         const checkRef = firebase.database().ref('user_checks');
         checkRef.once('value', res => {
             var l = res.val().length;
@@ -187,7 +262,10 @@ class RegisterPage extends React.Component {
                         age: this.state.age,
                         fullname: this.state.fullname,
                         img: "",
-                        gender: this.state.gender
+                        gender: this.state.gender,
+                        address: this.state.address,
+                        phone: this.state.phone,
+                        mobile_phone: this.state.mobile_phone
                     }
                 }
                 var authItem = {
@@ -200,10 +278,23 @@ class RegisterPage extends React.Component {
                     email: this.state.email,
                     id: userId               
                 }
+                var publicInfo = {
+                    age: this.state.age,
+                    name: this.state.fullname,
+                    img: "",
+                    gender: this.state.gender,
+                    address: this.state.address,
+                    phone: this.state.phone,
+                    mobile_phone: this.state.mobile_phone,
+                    username: this.state.username                   
+                }       
                 const userRef = firebase.database().ref('users');
                 const authRef = firebase.database().ref('auths');
+                const publicRef = firebase.database().ref(`public_info/${userId}`);
                 userRef.child(userId).set(userItem);
-                Promise.all([userRef.child(userId).set(userItem), authRef.child(userId).set(authItem), checkRef.child(l).set(checkItem)]).then(res => {
+                Promise.all([userRef.child(userId).set(userItem), authRef.child(userId).set(authItem)
+                    , checkRef.child(l).set(checkItem),
+                     publicRef.set(publicInfo)]).then(res => {
                     this.setState({isLoading: false, loaded: true, infoText: "Registration is success!"});
                     this.props.history.push("/login");
                 }).catch(err => {
@@ -309,13 +400,55 @@ class RegisterPage extends React.Component {
                                     <OutlinedInput
                                     
                                         id="filled-adornment-age"
-                                        type={'number'}
+                                        type={'text'}
                                         value={this.state.age}
                                         onChange={event => {this.handleAgeChange(event, false)}}
                                         aria-describedby="age-helper-text"
                                         labelWidth={70}
                                     />
                                     <FormHelperText id="age-helper-text"> &nbsp;{this.state.ageErrText}</FormHelperText>
+                                </FormControl>
+                            </div>
+                            <div className = "register-item">
+                                <FormControl variant="outlined" className = "form-field" error  = {this.state.addressErr}>
+                                    <InputLabel htmlFor="filled-adornment-address">Address</InputLabel>
+                                    <OutlinedInput
+                                        id="filled-adornment-address"
+                                        type={'text'}
+                                        value={this.state.address}
+                                        onChange={event => {this.handleAddressChange(event, false)}}
+                                        aria-describedby="address-helper-text"
+                                        labelWidth={50}
+                                    />
+                                    <FormHelperText id="address-helper-text"> &nbsp;{this.state.addressErrText}</FormHelperText>
+                                </FormControl>
+                            </div>
+                            <div className = "register-item">
+                                <FormControl variant="outlined" className = "form-field" error  = {this.state.phoneErr}>
+                                    <InputLabel htmlFor="filled-adornment-phone">Phone</InputLabel>
+                                    <OutlinedInput
+                                        id="filled-adornment-phone"
+                                        type={'text'}
+                                        value={this.state.phone}
+                                        onChange={event => {this.handlePhoneChange(event, false)}}
+                                        aria-describedby="phone-helper-text"
+                                        labelWidth={50}
+                                    />
+                                    <FormHelperText id="phone-helper-text"> &nbsp;{this.state.phoneErrText}</FormHelperText>
+                                </FormControl>
+                            </div>
+                            <div className = "register-item">
+                                <FormControl variant="outlined" className = "form-field" error  = {this.state.mobilePhoneErr}>
+                                    <InputLabel htmlFor="filled-adornment-phone-m">Mobile Phone</InputLabel>
+                                    <OutlinedInput
+                                        id="filled-adornment-phone-m"
+                                        type={'text'}
+                                        value={this.state.mobile_phone}
+                                        onChange={event => {this.handleMobilePhoneChange(event, false)}}
+                                        aria-describedby="m-phone-helper-text"
+                                        labelWidth={100}
+                                    />
+                                    <FormHelperText id="m-phone-helper-text"> &nbsp;{this.state.mobilePhoneErrText}</FormHelperText>
                                 </FormControl>
                             </div>
                             <div className = "register-item">
@@ -329,7 +462,7 @@ class RegisterPage extends React.Component {
                                 </FormControl>
                             </div>
                             <div className = "register-item">
-                                <Button variant="contained" onClick = {event => {this.handleRegister(event)}} color="secondary">
+                                <Button variant="contained" onClick = {event => {this.checkBeforeRegister(event)}} color="secondary">
                                     Register
                                 </Button>
                             </div>
