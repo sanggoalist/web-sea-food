@@ -58,6 +58,11 @@ function Drawser(props) {
     props.changeOpen(false);
     props.history.push("/user/profile");
   };
+  const handleProduct = type => event => {
+    setState({ left: false });
+    props.changeOpen(false);
+    props.history.push("/user/products");
+  };
   const handleLogout = type => event => {
     setState({ left: false });
     props.changeOpen(false);
@@ -213,9 +218,17 @@ function Drawser(props) {
           </ListItem>
         )}
         {JSON.parse(localStorage.getItem("userItem")) !== null ? (
-          <ListItem button key={"Logout"} onClick={handleLogout("profile")}>
+          <ListItem button key={"Your Products"} onClick={handleProduct("products")}>
             <ListItemIcon>
               {5 % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+            </ListItemIcon>
+            <ListItemText primary={"Your Products"} />
+          </ListItem>
+        ) : ''}
+        {JSON.parse(localStorage.getItem("userItem")) !== null ? (
+          <ListItem button key={"Logout"} onClick={handleLogout("profile")}>
+            <ListItemIcon>
+              {6 % 2 === 0 ? <InboxIcon /> : <MailIcon />}
             </ListItemIcon>
             <ListItemText primary={"Logout"} />
           </ListItem>
@@ -226,7 +239,7 @@ function Drawser(props) {
             onClick={handleRegister("register")}
           >
             <ListItemIcon>
-              {5 % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+              {6 % 2 === 0 ? <InboxIcon /> : <MailIcon />}
             </ListItemIcon>
             <ListItemText primary={"Register"} />
           </ListItem>

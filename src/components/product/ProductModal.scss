@@ -1,0 +1,30 @@
+#icon-button-file-product{
+    display: none;
+}
+.ModalCard {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate3d(-50%, -50%, 0);
+    height: 500px;
+    min-width: 500px;
+    overflow: auto;
+    .ProductWrapper {
+        .product-item {
+            text-align: center;
+            padding: 10px;
+            // min-width: 300px;
+            &.image {
+                img {
+                    height: 100px;
+                }
+            }
+            .form-field {
+                width: 100%;
+            }
+            &:last-child {
+                margin-bottom: 50px;
+            }
+        }
+    }
+}

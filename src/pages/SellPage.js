@@ -38,7 +38,16 @@ class SellPage extends React.Component {
         }
         const ref = firebase.database().ref(`products/${category}/sell`);
         ref.on('value', (snapshoot) => {
-          this.setState({items: (snapshoot.val() == null)? []:snapshoot.val(), isLoad: false});
+            var arr = [];
+            if (snapshoot.val() !== null){
+                var item = snapshoot.val();
+                arr = Object.keys(item).map(function(key) {
+                    return item[key];
+                    
+                });
+            }
+
+          this.setState({items: (snapshoot.val() == null)? []:arr, isLoad: false});
         });
       } 
     moveToDetail(event, index){
@@ -49,23 +58,23 @@ class SellPage extends React.Component {
             }
             
         }
-        this.props.history.push(`/items/${this.props.match.params['id']}/sell/${index-1}`);
+        this.props.history.push(`/items/${this.props.match.params['id']}/sell/${index}`);
     }
     render() {
       return (
         <div className="SellPage">
-             {(this.state.isLoad) ? <SpringModal load = {this.state.isLoad}/>: '' }
+             {(this.state.isLoad) ? <SpringModal load = {this.state.isLoad}/>: 
             <div className = "SellPageWrapper">
             <Grid container spacing={3} className = "SellPageContainer">
                     {this.state.items.map(item => {
                     return <Grid key = {item.id} item xs={12} className ="grid-container">
                         <Paper  className = "paper" onClickCapture = {event => {this.moveToDetail(event, item.id)}}>
-                            <ItemInfo index = {item.id} item = {item}></ItemInfo>
+                            <ItemInfo index = {item.id} item = {item} categoryId = {+this.props.match.params['id']}></ItemInfo>
                         </Paper>
                     </Grid>                       
                     })}
             </Grid>
-            </div>
+            </div>}
         </div>
       );
     }

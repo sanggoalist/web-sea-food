@@ -26,6 +26,7 @@ const useStyles = makeStyles(theme => ({
   },
   title: {
     display: "none",
+    cursor: 'pointer',
     [theme.breakpoints.up("sm")]: {
       display: "block"
     }
@@ -118,6 +119,18 @@ function Bar(props) {
     setAnchorEl(null);
     handleMobileMenuClose();
   };
+
+  const handleOpenProducts = () => {
+    props.history.push("/user/products");
+    setAnchorEl(null);
+    handleMobileMenuClose();
+  };
+
+  const handleOpenProduct = () => {
+    props.history.push("/user/products");
+    setAnchorEl(null);
+    handleMobileMenuClose();
+  };
   const handleLogin = () => {
     props.history.push("/login");
     setAnchorEl(null);
@@ -131,6 +144,9 @@ function Bar(props) {
   const handleClick = event => {
     props.changeOpen(true);
   };
+  const handleClickLogo = event => {
+    props.history.push("/home");
+  }
 
   const menuId = "primary-search-account-menu";
   const renderMenu = (
@@ -149,10 +165,14 @@ function Bar(props) {
         <MenuItem onClick={handleLogin}>Login</MenuItem>
       )}
       {JSON.parse(localStorage.getItem("userItem")) !== null ? (
+        <MenuItem onClick={handleOpenProduct}>Your Products</MenuItem>
+      ) : ''}
+      {JSON.parse(localStorage.getItem("userItem")) !== null ? (
         <MenuItem onClick={handleLogout}>Logout</MenuItem>
       ) : (
         <MenuItem onClick={handleRegister}>Register</MenuItem>
       )}
+
     </Menu>
   );
   const mobileMenuId = "primary-search-account-menu-mobile";
@@ -182,26 +202,65 @@ function Bar(props) {
         </IconButton>
         <p>Notifications</p>
       </MenuItem>
-      <MenuItem>
-        {JSON.parse(localStorage.getItem("userItem")) == null ? (
-          <IconButton
-            aria-label="account of current user"
-            aria-controls="primary-search-account-menu"
-            aria-haspopup="true"
-            color="inherit"
-            onClick={handleProfileMenuOpen}
-          >
-            <AccountCircle />
-          </IconButton>
-        ) : (
+      {(JSON.parse(localStorage.getItem("userItem")) !== null ) ? 
+        <MenuItem onClick={handleOpenProfile}>
           <Avatar
             className="profile-avatar"
             alt="User Avatar"
             src={JSON.parse(localStorage.getItem("userItem"))["img"]}
           ></Avatar>
-        )}
-        <p>Profile</p>
-      </MenuItem>
+        <p>&nbsp;&nbsp;Profile</p>
+        </MenuItem> :
+        <MenuItem onClick = {handleLogin}>
+          <IconButton
+            aria-label="account of current user"
+            aria-controls="primary-search-account-menu"
+            aria-haspopup="true"
+            color="inherit"
+          >
+            <AccountCircle />
+          </IconButton>
+          <p>Login</p>      
+        </MenuItem>
+      }
+      {(JSON.parse(localStorage.getItem("userItem")) !== null ) ? 
+          <MenuItem onClick = {handleOpenProducts}>
+          <IconButton
+            aria-label="account of current user"
+            aria-controls="primary-search-account-menu"
+            aria-haspopup="true"
+            color="inherit"
+          >
+            <AccountCircle />
+          </IconButton>
+          <p>Your products</p>      
+        </MenuItem> :
+            ''           
+      }
+      {(JSON.parse(localStorage.getItem("userItem")) !== null ) ? 
+          <MenuItem onClick = {handleLogout}>
+          <IconButton
+            aria-label="account of current user"
+            aria-controls="primary-search-account-menu"
+            aria-haspopup="true"
+            color="inherit"
+          >
+            <AccountCircle />
+          </IconButton>
+          <p>Logout</p>      
+        </MenuItem> :
+          <MenuItem onClick = {handleRegister}>
+          <IconButton
+            aria-label="account of current user"
+            aria-controls="primary-search-account-menu"
+            aria-haspopup="true"
+            color="inherit"
+          >
+            <AccountCircle />
+          </IconButton>
+          <p>Register</p>      
+        </MenuItem>             
+      }
     </Menu>
   );
 
@@ -219,8 +278,8 @@ function Bar(props) {
             >
               <MenuIcon />
             </IconButton>
-            <Typography className={classes.title} variant="h6" noWrap>
-              Sea Food
+            <Typography className={classes.title} variant="h6" noWrap onClick = {handleClickLogo}>
+              Sang Sea Food
             </Typography>
             <div className={classes.search}>
               <div className={classes.searchIcon}>

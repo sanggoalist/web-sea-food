@@ -18,8 +18,26 @@ class ItemInfo extends React.Component {
 
     }
     clickFavorite(){
-        
-        const ref = firebase.database().ref(`products/shrimp/sell/${this.props.index - 1}`);
+        var category = "";
+        var catId = +this.props['categoryId'];
+        if (catId === 1){
+            category = "shrimp";
+        } else if (catId === 2){
+            category = "cm-crab";
+        }
+        else if (catId === 3){
+            category = "squid";
+        }
+        else if (catId === 4){
+            category = "fish";
+        }
+        else if (catId === 5){
+            category = "other";
+        }     
+         else {
+            return;
+        }
+        const ref = firebase.database().ref(`products/${category}/sell/${this.props.index}`);
         const item =this.props.item;
         item.isFavor = !this.state.isFaverite;
         ref.update(item).then(res => {
@@ -29,14 +47,13 @@ class ItemInfo extends React.Component {
         })
     }
     render() {
-        
       return (
         <div className="ItemInfo">
             <Grid container spacing={0} className = "ItemInfoContainer">
                 <Grid item xs={2}>
                     {/* <Paper className = "paper-info"><div>AVATAR</div></Paper> */}
                     <div className = "paper-i avatar-i"><div className = "image-wrapper">
-                                <img src ="https://d213sdapb08052.cloudfront.net/assets/recipes/roasted-shrimp-cocktail/_entryTopPhotoLarge/39-roasted-shrimp-web-horizon.jpg?mtime=20160725113522"></img>
+                                <img src = {this.props.item.img}></img>
                             </div>
                         </div>
                 </Grid>
