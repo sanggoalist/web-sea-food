@@ -1,0 +1,14 @@
+.UserInfo {
+    .ListWrapper {
+        .ListText {
+            word-break: break-all;
+        }
+        .ListAction {
+            @media screen and (max-width: 736px) {
+                position: relative;
+                transform: none;
+                right: 0px;
+            }
+        }
+    }
+}

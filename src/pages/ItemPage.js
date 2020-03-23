@@ -27,10 +27,10 @@ class ItemPage extends React.Component {
         <div className="ItemPage">
             <div className = "ItemPageWrapper">
             <Grid container spacing={3} className = "ItemPageContainer">
-                <Grid item xs={6}>
+                <Grid item sm = {6} xs={12}>
                 <Paper className = "paper left zoomIn animated" onClick = {event => this.handleClick()}><div className = "paper-content left">SELL PRODUCTS</div></Paper>
                 </Grid>
-                <Grid item xs={6}>
+                <Grid item sm = {6} xs={12}>
                 <Paper className = "paper right zoomIn animated"><div className = "paper-content right">BUY PRODUCTS</div></Paper>
                 </Grid>
             </Grid>

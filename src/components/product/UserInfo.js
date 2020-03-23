@@ -16,7 +16,7 @@ import Typography from '@material-ui/core/Typography';
 import FolderIcon from '@material-ui/icons/Folder';
 import PhoneIcon from '@material-ui/icons/Phone';
 import firebase from "../../Firebase";
-
+import './UserInfo.scss';
 class UserInfo extends React.Component {
     
   constructor(props){
@@ -56,18 +56,18 @@ class UserInfo extends React.Component {
     render() {
       return (
         <div className="UserInfo">
-            <List dense={this.state.dense}>
+            <List dense={this.state.dense} className = "ListWrapper">
               {this.generate(
                 <ListItem>
                   <ListItemAvatar>
                     <Avatar src = {this.state.user.img}>
                     </Avatar>
                   </ListItemAvatar>
-                  <ListItemText
+                  <ListItemText className = "ListText"
                     primary= {this.state.user.name}
                     secondary={this.state.secondary ?this.state.user.email : null}
                   />
-                  <ListItemSecondaryAction>
+                  <ListItemSecondaryAction className = "ListAction">
                   {this.state.user.phone}
                     <IconButton edge="end" aria-label="delete">
                       <PhoneIcon />

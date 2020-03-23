@@ -11,9 +11,15 @@
                 position: relative;
                 &.left {
                     margin-left: 24px;
+                    @media screen and (max-width: 736px) {
+                        margin-left: 0px;
+                    }
                 }
                 &.right {
                     margin-right: 24px;
+                    @media screen and (max-width: 736px) {
+                        margin-right: 0px;
+                    }
                 }
                 &:hover {
                     // border: 3px solid rgb(197, 197, 197);
