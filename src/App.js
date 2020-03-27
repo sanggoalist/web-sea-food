@@ -18,6 +18,7 @@ import RegisterPage from './pages/RegisterPage';
 import UnAuthRoute from './pages/UnAuthRoute';
 import UserInfoPage from './pages/UserInfoPage';
 import UserProductPage from './pages/UserProductPage';
+import EditText from './components/EditText';
 function App(props) {
 
   const [state, setState] = React.useState({
@@ -44,6 +45,7 @@ function App(props) {
           {/* <DefaultRoute path="/" component={HomePage}/> */}
           <Route exact={true} path="/" component={HomePage}/>
           <Route exact path="/home" component={HomePage}/>
+          <Route exact path="/edit" component={EditText}/>
           <Route  exact path="/items/:id" component={ItemPage}/>
           <Route exact path="/items/:id/sell" component={SellPage}/>
           <Route exact path="/items/:id/sell/:idd" component={ItemDetail}/>

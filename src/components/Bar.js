@@ -16,6 +16,9 @@ import NotificationsIcon from "@material-ui/icons/Notifications";
 import MoreIcon from "@material-ui/icons/MoreVert";
 import { withRouter } from "react-router-dom";
 import Avatar from "@material-ui/core/Avatar";
+import SvgIcon from "@material-ui/icons/Menu";
+import { ReactComponent as StarIcon } from "../../src/logo.svg";
+import { Button } from "@material-ui/core";
 
 const useStyles = makeStyles(theme => ({
   grow: {
@@ -26,7 +29,7 @@ const useStyles = makeStyles(theme => ({
   },
   title: {
     display: "none",
-    cursor: 'pointer',
+    cursor: "pointer",
     [theme.breakpoints.up("sm")]: {
       display: "block"
     }
@@ -146,7 +149,7 @@ function Bar(props) {
   };
   const handleClickLogo = event => {
     props.history.push("/home");
-  }
+  };
 
   const menuId = "primary-search-account-menu";
   const renderMenu = (
@@ -166,13 +169,14 @@ function Bar(props) {
       )}
       {JSON.parse(localStorage.getItem("userItem")) !== null ? (
         <MenuItem onClick={handleOpenProduct}>Your Products</MenuItem>
-      ) : ''}
+      ) : (
+        ""
+      )}
       {JSON.parse(localStorage.getItem("userItem")) !== null ? (
         <MenuItem onClick={handleLogout}>Logout</MenuItem>
       ) : (
         <MenuItem onClick={handleRegister}>Register</MenuItem>
       )}
-
     </Menu>
   );
   const mobileMenuId = "primary-search-account-menu-mobile";
@@ -202,29 +206,17 @@ function Bar(props) {
         </IconButton>
         <p>Notifications</p>
       </MenuItem>
-      {(JSON.parse(localStorage.getItem("userItem")) !== null ) ? 
+      {JSON.parse(localStorage.getItem("userItem")) !== null ? (
         <MenuItem onClick={handleOpenProfile}>
           <Avatar
             className="profile-avatar"
             alt="User Avatar"
             src={JSON.parse(localStorage.getItem("userItem"))["img"]}
           ></Avatar>
-        <p>&nbsp;&nbsp;Profile</p>
-        </MenuItem> :
-        <MenuItem onClick = {handleLogin}>
-          <IconButton
-            aria-label="account of current user"
-            aria-controls="primary-search-account-menu"
-            aria-haspopup="true"
-            color="inherit"
-          >
-            <AccountCircle />
-          </IconButton>
-          <p>Login</p>      
+          <p>&nbsp;&nbsp;Profile</p>
         </MenuItem>
-      }
-      {(JSON.parse(localStorage.getItem("userItem")) !== null ) ? 
-          <MenuItem onClick = {handleOpenProducts}>
+      ) : (
+        <MenuItem onClick={handleLogin}>
           <IconButton
             aria-label="account of current user"
             aria-controls="primary-search-account-menu"
@@ -233,12 +225,11 @@ function Bar(props) {
           >
             <AccountCircle />
           </IconButton>
-          <p>Your products</p>      
-        </MenuItem> :
-            ''           
-      }
-      {(JSON.parse(localStorage.getItem("userItem")) !== null ) ? 
-          <MenuItem onClick = {handleLogout}>
+          <p>Login</p>
+        </MenuItem>
+      )}
+      {JSON.parse(localStorage.getItem("userItem")) !== null ? (
+        <MenuItem onClick={handleOpenProducts}>
           <IconButton
             aria-label="account of current user"
             aria-controls="primary-search-account-menu"
@@ -247,9 +238,13 @@ function Bar(props) {
           >
             <AccountCircle />
           </IconButton>
-          <p>Logout</p>      
-        </MenuItem> :
-          <MenuItem onClick = {handleRegister}>
+          <p>Your products</p>
+        </MenuItem>
+      ) : (
+        ""
+      )}
+      {JSON.parse(localStorage.getItem("userItem")) !== null ? (
+        <MenuItem onClick={handleLogout}>
           <IconButton
             aria-label="account of current user"
             aria-controls="primary-search-account-menu"
@@ -258,9 +253,21 @@ function Bar(props) {
           >
             <AccountCircle />
           </IconButton>
-          <p>Register</p>      
-        </MenuItem>             
-      }
+          <p>Logout</p>
+        </MenuItem>
+      ) : (
+        <MenuItem onClick={handleRegister}>
+          <IconButton
+            aria-label="account of current user"
+            aria-controls="primary-search-account-menu"
+            aria-haspopup="true"
+            color="inherit"
+          >
+            <AccountCircle />
+          </IconButton>
+          <p>Register</p>
+        </MenuItem>
+      )}
     </Menu>
   );
 
@@ -278,8 +285,25 @@ function Bar(props) {
             >
               <MenuIcon />
             </IconButton>
-            <Typography className={classes.title} variant="h6" noWrap onClick = {handleClickLogo}>
-              Sang Sea Food
+            <Typography
+              className={classes.title}
+              variant="h6"
+              noWrap
+              onClick={handleClickLogo}
+            >
+              <Button
+                variant="contained"
+                color="primary"
+                startIcon={
+                  <SvgIcon
+                    className="logo"
+                    component={StarIcon}
+                    viewBox="0 0 1000 1000"
+                  />
+                }
+              >
+                Sang Sea Food
+              </Button>
             </Typography>
             <div className={classes.search}>
               <div className={classes.searchIcon}>

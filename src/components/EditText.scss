@@ -1,0 +1,34 @@
+.EditText {
+  img {
+    height: 100%;
+    width: 100%;
+  }
+  height: 100%;
+  border: 1px solid;
+  border-color: rgba(0, 0, 0, 0.23);
+  border-radius: 4px;
+  padding: 10px;
+  &:focus-within {
+    border-color: #3f51b5 !important;
+  }
+  &:hover {
+    border-color: black;
+  }
+  .wrapperClassName {
+    height: 100%;
+    // border: 1px solid;
+    // border-color: rgba(0, 0, 0, 0.23);
+    border-radius: inherit;
+    // &:focus-within {
+    //     border-color: #3f51b5;
+    // }
+    // padding: 100px;
+    .toolbarClassName {
+      //   width: 100%;
+    }
+    .editorClassName {
+      max-height: 500px;
+      min-height: 500px;
+    }
+  }
+}

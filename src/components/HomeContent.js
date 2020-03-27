@@ -14,8 +14,10 @@ class HomeContent extends React.Component {
         super(props);
         this.state = {
             url: null,
-            isUrl: false
+            isUrl: false,
+            maxWidth: 501
         }
+        this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
 
     }
     classes  = makeStyles(theme => ({
@@ -66,16 +68,27 @@ class HomeContent extends React.Component {
 
     handleClick(event){
         this.props.history.push(`items/${event}`);
-        
 
     }
+    componentDidMount() {
+        window.addEventListener("resize", this.updateWindowDimensions());
+    }
+    
+    componentWillUnmount() {
+        window.removeEventListener("resize", this.updateWindowDimensions)
+    }
+    
+    updateWindowDimensions() {
+       this.setState({ maxWidth: window.innerWidth });
+    }
     render() {
+
         const tileData = [
             {
                 img: 'https://www.citarella.com/media/catalog/product/cache/1/image/97a78116f02a369697db694bbb2dfa59/0/2/024008100000_01_2.jpg',
                 title: 'Shrimp',
                 author: 'author',
-                cols: 1,
+                cols: (this.state.maxWidth > 500)? 1: 3,
                 featured: false,
                 type: 1                
             },
@@ -83,7 +96,7 @@ class HomeContent extends React.Component {
                 img: 'https://haisanphuongnam.com/asset/upload/image/cua_th%E1%BB%8Bt_c%C3%A0_mau.jpg',
                 title: 'Ca Mau Crabs',
                 author: 'author',
-                cols: 1,
+                cols: (this.state.maxWidth > 500)? 1: 3,
                 featured: false,
                 type: 2
             },
@@ -91,7 +104,7 @@ class HomeContent extends React.Component {
                 img: 'https://i.guim.co.uk/img/media/31c4eb21065a493285c5bb6d90f141ccc59c848b/0_80_1066_640/master/1066.jpg?width=1920&quality=85&auto=format&fit=max&s=cf081fb75af25557e40d7a3252084075',
                 title: 'Squid',
                 author: 'author',
-                cols: 1,
+                cols: (this.state.maxWidth > 500)? 1: 3,
                 featured: false,
                 type: 3
             },
@@ -99,7 +112,7 @@ class HomeContent extends React.Component {
                 img: 'https://haisanvungtau.vn/wp-content/uploads/2018/06/mua-ca-ngu-dai-duong-tai-vung-tau-1-1.png',
                 title: 'Fish',
                 author: 'author',
-                cols: 1,
+                cols: (this.state.maxWidth > 500)? 1: 3,
                 featured: false,
                 type: 4
             }, 
@@ -107,7 +120,7 @@ class HomeContent extends React.Component {
                 img: 'https://188loto.com/wp-content/uploads/2019/10/mo-bat-duoc-ba-ba-danh-con-gi-2.jpg',
                 title: 'The other products',
                 author: 'author',
-                cols: 2,
+                cols: (this.state.maxWidth > 500)? 2: 3,
                 featured: false,
                 type: 5
             },           
